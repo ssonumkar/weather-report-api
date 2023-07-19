@@ -1,0 +1,15 @@
+UrlList: 
+  coordinates:
+      urlString: "http://api.openweathermap.org/geo/1.0/direct"
+      Parameters:
+        q: 
+        limit: 5
+        appid: 
+      Method: GET
+  weather_report: 
+      urlString: "https://api.openweathermap.org/data/2.5/weather"
+      Parameters:
+        lat: -1
+        lon: -1
+        appid: 
+      Method: GET

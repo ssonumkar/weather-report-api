@@ -1,0 +1,7 @@
+server:
+  host: localhost
+  port: 8082
+database:
+  driver: mysql
+  connectionString: "sagar:password@tcp(localhost:3306)/weather_report?parseTime=true"
+jwtSecret: YOUR_JWT_SECRET_KEY
