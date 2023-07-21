@@ -23,13 +23,13 @@ type BulkDeleteWeatherHistory struct{
 type IWeatherHistoryService interface{
 	InsertWeatherSearch(weather WeatherHistory, logger log.CustomLogger) (error)
 	DeleteWeatherHistory(historyID string, logger log.CustomLogger) error
-	GetWeatherSearchHistory(logger log.CustomLogger)([]WeatherHistory, error)
+	GetWeatherSearchHistory(userID string, logger log.CustomLogger)([]WeatherHistory, error)
 	BulkDeleteWeatherHistory(historyIDs BulkDeleteWeatherHistory, logger log.CustomLogger) error
 }
 
 type IWeatherHistoryRepository interface{
 	InsertWeatherSearch(weather WeatherHistory, logger log.CustomLogger) error
 	DeleteWeatherHistory(historyID string, logger log.CustomLogger) error
-	GetWeatherSearchHistory(logger log.CustomLogger) ([]WeatherHistory, error)
+	GetWeatherSearchHistory(userID string, logger log.CustomLogger) ([]WeatherHistory, error)
 	BulkDeleteWeatherHistory(historyIDs BulkDeleteWeatherHistory, logger log.CustomLogger) error
 }

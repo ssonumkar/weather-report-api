@@ -23,13 +23,13 @@ func TestShouldPassForLogin(t *testing.T) {
 
 	expectedToken := "temp_token"
 	//When
-	actual_token, err := mockSuccessUserService.Login(username, password, logger)
+	loginResp, err := mockSuccessUserService.Login(username, password, logger)
 	if err != nil{
 		t.Fatal("Error while login ",err)
 	}
 	//Then
-	if actual_token != expectedToken{
-		t.Errorf("Expected %v but got %s", expectedToken, actual_token)
+	if loginResp.JwtToken != expectedToken{
+		t.Errorf("Expected %v but got %s", expectedToken, loginResp.JwtToken)
 	}
 }
 
@@ -63,13 +63,13 @@ func TestShouldNotPassForLogin(t *testing.T) {
 
 	expectedToken := "temp_token"
 	//When
-	actual_token, err := mockFailUserService.Login(username, password, logger)
+	loginResp, err := mockFailUserService.Login(username, password, logger)
 	if err != nil{
 		t.Fatal("Error while login ",err)
 	}
 	//Then
-	if actual_token == expectedToken{
-		t.Errorf("%v should not be same as %s", expectedToken, actual_token)
+	if loginResp.JwtToken == expectedToken{
+		t.Errorf("%v should not be same as %s", expectedToken, loginResp.JwtToken)
 	}
 }
 

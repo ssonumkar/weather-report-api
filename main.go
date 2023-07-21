@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"path"
 
+	"github.com/rs/cors"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/ssonumkar/weather-report-api/internal/config"
 	"github.com/ssonumkar/weather-report-api/internal/encrypt"
@@ -31,10 +33,17 @@ func main() {
 	encrypt.InitTokenPool()
 
 	router := routes.SetupRoutes(db, cfg.JWTSecret, *logger)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPatch},
+		AllowCredentials: true,
+		AllowedHeaders: []string{"*"},
+	})
+	handler := c.Handler(router)
 
 	addr := cfg.Server.Host + ":" + cfg.Server.Port
 	logger.Info(fmt.Sprintf("Server is running on %s", addr))
-	log.Fatal(http.ListenAndServe(addr, router))
+	log.Fatal(http.ListenAndServe(addr, handler))
 }
 
 func createDatabaseConnection(databaseConfig config.DatabaseConfig) (*sql.DB, error) {

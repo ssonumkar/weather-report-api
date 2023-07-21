@@ -15,6 +15,7 @@ func NewEndpoint(name string, url string, method string) *Endpoint {
 }
 
 var (
+	Auth                     = Endpoint{"Auth Middleware", "", ""}
 	Login                    = Endpoint{"Login", "/api/login", "POST"}
 	Logout                   = Endpoint{"Logout", "/api/logout", "POST"}
 	Register                 = Endpoint{"Logout", "/api/register", "POST"}

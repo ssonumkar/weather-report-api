@@ -73,7 +73,8 @@ func (c *WeatherHistoryController) DeleteWeatherHistory(w http.ResponseWriter, r
 func (c *WeatherHistoryController) BulkDeleteWeatherHistory(w http.ResponseWriter, r *http.Request) {
 	c.logger.UpdateEndpoint(log.Weather_Hist_Bulk_Delete)
 	c.logger.Info("---------------------------------------------------")
-	
+	// body, _ := io.ReadAll(r.Body)
+	// c.logger.Debug(fmt.Sprintf("REquest body: %s", string(body)))
 	var historyIDs BulkDeleteWeatherHistory
 	err :=  json.NewDecoder(r.Body).Decode(&historyIDs)
 	if err != nil {
@@ -98,7 +99,10 @@ func (c *WeatherHistoryController) BulkDeleteWeatherHistory(w http.ResponseWrite
 func (c *WeatherHistoryController) GetWeatherSearchHistory(w http.ResponseWriter, r *http.Request){
 	c.logger.UpdateEndpoint(log.Weather_Hist_Get)
 	c.logger.Info("-------------------------------------------------")
-	history, err := c.weatherHistoryService.GetWeatherSearchHistory(c.logger)
+	vars := mux.Vars(r)
+	userID := vars["user_id"]
+	c.logger.Debug(fmt.Sprintf("User ID: %s",userID))
+	history, err := c.weatherHistoryService.GetWeatherSearchHistory(userID, c.logger)
 	if err != nil{
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
 		return

@@ -60,9 +60,10 @@ func (r *WeatherHistoryRepository) DeleteWeatherHistory(historyID string, logger
 	return nil
 }
 
-func (r *WeatherHistoryRepository) GetWeatherSearchHistory(logger log.CustomLogger) ([]WeatherHistory, error){
-	rows, err := r.db.Query("SELECT * FROM WeatherHistory")
-
+func (r *WeatherHistoryRepository) GetWeatherSearchHistory(userID string, logger log.CustomLogger) ([]WeatherHistory, error){
+	query := fmt.Sprintf("SELECT * FROM WeatherHistory where user_id = %s", userID)
+	rows, err := r.db.Query(query)
+	logger.Debug(query)
     if err != nil {
 		logger.Error(fmt.Sprint("Error executiong select query: ", err.Error()))
         return nil, err

@@ -34,15 +34,13 @@ func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	c.logger.Debug(fmt.Sprintf("User username received is %s", user.Username))
 
 	// Call the authentication service to handle login, passing the database connection
-	token, err := c.authService.Login(user.Username, user.Password, c.logger)
+	loginData, err := c.authService.Login(user.Username, user.Password, c.logger)
 	if err != nil {
 		response.RespondWithError(w, http.StatusInternalServerError, fmt.Sprintf("Internal Server Error: %s ", err))
 		return
 	}
 	c.logger.Info("Login Successful")
-	response.RespondWithJSON(w, http.StatusOK, map[string]string{
-		"token": token,
-	})
+	response.RespondWithJSON(w, http.StatusOK, loginData)
 }
 
 func (c *AuthController) Logout(w http.ResponseWriter, r *http.Request) {

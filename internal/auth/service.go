@@ -20,29 +20,29 @@ func NewAuthService(userRepository IUserRepository, secretKey string) *AuthServi
 }
 
 // Login performs user login
-func (s *AuthService) Login(username, password string, logger log.CustomLogger) (string, error) {
+func (s *AuthService) Login(username, password string, logger log.CustomLogger) (LoginResponse, error) {
 	
 	user, err := s.userRepository.GetUserByUsername(username, logger)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Error finding user: %s",err.Error()))
-		return "", err
+		return LoginResponse{}, err
 	}
 	logger.Info("User found")
 	// Compare the provided password with the stored password
 	err =encrypt.ComparePasswords(user.Password, password)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Error comparing passwords: %s",err.Error()))
-		return "", fmt.Errorf("incorrect Password")
+		return LoginResponse{}, fmt.Errorf("incorrect Password")
 	}
 	// Generate a JWT token
 	token, err :=encrypt.GenerateToken(user.ID, user.Username, s.secretKey)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Error generating token: %s",err.Error()))
-		return "", err
+		return LoginResponse{}, err
 	}
 	encrypt.AddTokenToPool(token)
 	logger.Debug(fmt.Sprintf("Token added to pool: %s", token))
-	return token, nil
+	return LoginResponse{user.ID, user.Username, token}, nil
 }
 
 // Logout performs user logout

@@ -30,13 +30,14 @@ func SetupRoutes(db *sql.DB, JWTSecretKey string, logger log.CustomLogger) *mux.
 	_middleware := middleware.NewAuthMiddleware(JWTSecretKey)
 	// Define routes and map them to the corresponding handlers
 	router.HandleFunc("/api/login", authController.Login).Methods("POST")
-	router.HandleFunc("/api/logout", _middleware.Authenticate(authController.Logout)).Methods("POST")
+	router.HandleFunc("/api/logout", _middleware.Authenticate(logger, authController.Logout)).Methods("POST")
 	router.HandleFunc("/api/register", authController.Register).Methods("POST")
-	router.HandleFunc("/api/weather", _middleware.Authenticate(weatherController.GetCurrentWeather)).Methods("GET")
-	router.HandleFunc("/api/weather/history", _middleware.Authenticate(weatherHistoryController.GetWeatherSearchHistory)).Methods("GET")
-	router.HandleFunc("/api/weather/history", _middleware.Authenticate(weatherHistoryController.AddSearchedWeather)).Methods("POST")
-	router.HandleFunc("/api/weather/history/bulk", _middleware.Authenticate(weatherHistoryController.BulkDeleteWeatherHistory)).Methods("DELETE")
-	router.HandleFunc("/api/weather/history/{history_id}", _middleware.Authenticate(weatherHistoryController.DeleteWeatherHistory)).Methods("DELETE")
+	router.HandleFunc("/api/weather", _middleware.Authenticate(logger, weatherController.GetCurrentWeather)).Methods("GET")
+	router.HandleFunc("/api/weather/history/{user_id}", _middleware.Authenticate(logger, weatherHistoryController.GetWeatherSearchHistory)).Methods("GET")
+	router.HandleFunc("/api/weather/history", _middleware.Authenticate(logger, weatherHistoryController.AddSearchedWeather)).Methods("POST")
+	router.HandleFunc("/api/weather/history", _middleware.Authenticate(logger, weatherHistoryController.BulkDeleteWeatherHistory)).Methods("PATCH")
+	router.HandleFunc("/api/weather/history/{history_id}", _middleware.Authenticate(logger, weatherHistoryController.DeleteWeatherHistory)).Methods("DELETE")
+	
 
 	return router
 }

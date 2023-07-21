@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ssonumkar/weather-report-api/internal/encrypt"
 	response "github.com/ssonumkar/weather-report-api/internal/http_response"
+	"github.com/ssonumkar/weather-report-api/internal/log"
 )
 
 // AuthMiddleware is a middleware for authentication
@@ -22,19 +22,21 @@ func NewAuthMiddleware(secretKey string) *AuthMiddleware {
 }
 
 // Authenticate is the middleware function for authentication
-func (m *AuthMiddleware) Authenticate(next http.HandlerFunc) http.HandlerFunc {
+func (m *AuthMiddleware) Authenticate(logger log.CustomLogger, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		logger.UpdateEndpoint(log.Auth)
+		logger.Info("Authorizing..")
 		tokenString := r.Header.Get("Authorization")
-
+		logger.Debug(tokenString)
 		if tokenString == "" {
+			logger.Error("Token cannot be null")
 			response.RespondWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
-		fmt.Println(tokenString)
 
 		if !encrypt.IsLoggedIn(tokenString) {
-			log.Println("token invalid, not present in pool")
+			logger.Error("token invalid, not present in pool")
 			response.RespondWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
@@ -42,11 +44,11 @@ func (m *AuthMiddleware) Authenticate(next http.HandlerFunc) http.HandlerFunc {
 			return []byte(m.secretKey), nil
 		})
 		if err != nil || !token.Valid {
-			log.Println("Failed to authenticate token:", err)
+			logger.Error(fmt.Sprintf("Failed to authenticate token: %s", err))
 			response.RespondWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
-
+		logger.Info("Authorized !")
 		next.ServeHTTP(w, r)
 	}
 }

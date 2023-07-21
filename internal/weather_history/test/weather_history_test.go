@@ -46,7 +46,7 @@ func TestShouldSucceedForGetWeatherSearchHistory(t *testing.T){
 	expected = append(expected, weatherhistory.WeatherHistory{Id: 2, UserId: 12, City: "mumbai", TempMin: 1123, TempMax: 2234, FeelsLike: 1122, CreatedAt: time.Now()})
 
 	//When
-	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory(logger)
+	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory("12",logger)
 	if err != nil{
 		t.Fatal("Could not get history data")
 	}
@@ -96,7 +96,7 @@ func TestShouldFailForrGetWeatherSearchHistory(t *testing.T){
 	expected = append(expected, weatherhistory.WeatherHistory{Id: 2, UserId: 12, City: "mumbai1", TempMin: 1123, TempMax: 2234, FeelsLike: 1122, CreatedAt: time.Now()})
 
 	//When
-	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory(logger)
+	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory("13",logger)
 	if err != nil{
 		t.Fatal("Could not get history data")
 	}

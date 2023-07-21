@@ -21,8 +21,8 @@ func (s *WeatherHistoryService) DeleteWeatherHistory(historyID string, logger lo
 	return s.repo.DeleteWeatherHistory(historyID, logger)
 }
 
-func (s *WeatherHistoryService) GetWeatherSearchHistory(logger log.CustomLogger) ([]WeatherHistory, error){
-	return s.repo.GetWeatherSearchHistory(logger)
+func (s *WeatherHistoryService) GetWeatherSearchHistory(userID string, logger log.CustomLogger) ([]WeatherHistory, error){
+	return s.repo.GetWeatherSearchHistory(userID, logger)
 }
 
 func (s *WeatherHistoryService)	BulkDeleteWeatherHistory(historyIDs BulkDeleteWeatherHistory, logger log.CustomLogger) error{

@@ -16,7 +16,13 @@ type IUserRepository interface{
 }
 
 type IAuthService interface{
-	Login(username, password string,logger log.CustomLogger) (string, error) 
+	Login(username, password string,logger log.CustomLogger) (LoginResponse, error) 
 	Logout(token string, logger log.CustomLogger) error
 	RegisterUser(user User, logger log.CustomLogger) (error) 
+}
+
+type LoginResponse struct{
+	ID int `json:"id"`
+	Username string `json:"username"`
+	JwtToken string `json:"jwt_token"`
 }
