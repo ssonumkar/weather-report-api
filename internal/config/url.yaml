@@ -11,5 +11,6 @@ UrlList:
       Parameters:
         lat: -1
         lon: -1
-        appid: 
+        appid:
+        unit: metric 
       Method: GET

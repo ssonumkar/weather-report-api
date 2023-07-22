@@ -7,6 +7,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var testPasswordManager encrypt.IPasswordManager = encrypt.NewPasswordManager()
+
 func TestSuccessComparePasswords(t *testing.T) {
 	//given
 	plainPassword := "plaintextpassowrd"
@@ -15,21 +17,21 @@ func TestSuccessComparePasswords(t *testing.T) {
 		t.Error(err)
 	}
 	//when
-	err = encrypt.ComparePasswords(string(hashedPassword), plainPassword)
+	err = testPasswordManager.ComparePasswords(string(hashedPassword), plainPassword, logger)
 	//then
-	if err != nil{
+	if err != nil {
 		t.Errorf("Expected no error but got err as %s", err.Error())
 	}
 }
 
-func TestShouldFailComparePasswords(t *testing.T){
+func TestShouldFailComparePasswords(t *testing.T) {
 	//given
 	plainPassword := "plaintextpassowrd"
-	hashedPassword:= "hashedPassword"
+	hashedPassword := "hashedPassword"
 	//when
-	err := encrypt.ComparePasswords(string(hashedPassword), plainPassword)
+	err := testPasswordManager.ComparePasswords(string(hashedPassword), plainPassword, logger)
 	//then
-	if err != nil{
-		t.Errorf("Expected no error but got err as %s", err.Error())
-	}	
+	if err == nil {
+		t.Errorf("Expected error but got nil")
+	}
 }

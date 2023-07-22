@@ -24,5 +24,5 @@ func (m *MockFailUserRepository) CreateUser(user auth.User, logger log.CustomLog
 	return fmt.Errorf("")
 }
 func (m *MockFailUserRepository) GetUserByUsername(username string, logger log.CustomLogger) (auth.User, error){
-	return auth.User{}, fmt.Errorf("")
+	return auth.User{}, fmt.Errorf("User not available")
 }

@@ -58,4 +58,5 @@ func updateWeatherApiConfig(url *config.UrlConfig, lat float64, lon float64, api
 	url.UrlList["weather_report"].Parameters["lat"] = lat
 	url.UrlList["weather_report"].Parameters["lon"] = lon
 	url.UrlList["weather_report"].Parameters["appid"] = apiKey
+	url.UrlList["weather_report"].Parameters["units"] = "metric"
 }

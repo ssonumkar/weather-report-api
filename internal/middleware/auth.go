@@ -22,7 +22,7 @@ func NewAuthMiddleware(secretKey string) *AuthMiddleware {
 }
 
 // Authenticate is the middleware function for authentication
-func (m *AuthMiddleware) Authenticate(logger log.CustomLogger, next http.HandlerFunc) http.HandlerFunc {
+func (m *AuthMiddleware) Authenticate(tokenPool encrypt.IAuthTokenPool, logger log.CustomLogger, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.UpdateEndpoint(log.Auth)
 		logger.Info("Authorizing..")
@@ -35,7 +35,7 @@ func (m *AuthMiddleware) Authenticate(logger log.CustomLogger, next http.Handler
 		}
 		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
 
-		if !encrypt.IsLoggedIn(tokenString) {
+		if !tokenPool.IsValid(logger, tokenString) {
 			logger.Error("token invalid, not present in pool")
 			response.RespondWithError(w, http.StatusUnauthorized, "Unauthorized")
 			return

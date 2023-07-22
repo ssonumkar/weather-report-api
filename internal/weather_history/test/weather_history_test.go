@@ -43,7 +43,6 @@ func TestShouldSucceedForGetWeatherSearchHistory(t *testing.T){
 	//Given
 	var expected []weatherhistory.WeatherHistory
 	expected = append(expected, weatherhistory.WeatherHistory{Id: 1, UserId: 2, City: "pune", TempMin: 123, TempMax: 234, FeelsLike: 122, CreatedAt: time.Now()})
-	expected = append(expected, weatherhistory.WeatherHistory{Id: 2, UserId: 12, City: "mumbai", TempMin: 1123, TempMax: 2234, FeelsLike: 1122, CreatedAt: time.Now()})
 
 	//When
 	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory("12",logger)
@@ -83,10 +82,10 @@ func TestShouldFailForrDeleteWeatherHistory(t *testing.T){
 	//Given
 	histId := "12"
 	//When
-	err := weatherSuccessHistoryService.DeleteWeatherHistory(histId, logger)
+	err := weatherFailHistoryService.DeleteWeatherHistory(histId, logger)
 	//Then
-	if err != nil{
-		t.Errorf("expected no err but got %v", err.Error())
+	if err == nil{
+		t.Errorf("expected err but got nil")
 	}
 }
 func TestShouldFailForrGetWeatherSearchHistory(t *testing.T){
@@ -96,23 +95,18 @@ func TestShouldFailForrGetWeatherSearchHistory(t *testing.T){
 	expected = append(expected, weatherhistory.WeatherHistory{Id: 2, UserId: 12, City: "mumbai1", TempMin: 1123, TempMax: 2234, FeelsLike: 1122, CreatedAt: time.Now()})
 
 	//When
-	actual, err := weatherSuccessHistoryService.GetWeatherSearchHistory("13",logger)
-	if err != nil{
-		t.Fatal("Could not get history data")
+	_, err := weatherFailHistoryService.GetWeatherSearchHistory("13",logger)
+	if err == nil{
+		t.Fatal("Expected error but got nil")
 	}
 	//Then
 
-	for i := 0; i<len(expected);i++ {
-		if expected[i] == actual[i]{
-			t.Errorf("%v should not match with %v", expected, actual)
-		}
-	}
 }
 func TestShouldFailForrBulkDeleteWeatherHistory(t *testing.T){
 	//Given
 	historyId := "2"
 	//When
-	err := weatherSuccessHistoryService.DeleteWeatherHistory(historyId, logger)
+	err := weatherFailHistoryService.DeleteWeatherHistory(historyId, logger)
 	//Then
 	if err == nil{
 		t.Errorf("expected err but got nil")

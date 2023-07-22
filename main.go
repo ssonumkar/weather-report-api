@@ -11,13 +11,12 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/ssonumkar/weather-report-api/internal/config"
-	"github.com/ssonumkar/weather-report-api/internal/encrypt"
 	custom_log "github.com/ssonumkar/weather-report-api/internal/log"
 	"github.com/ssonumkar/weather-report-api/internal/routes"
 )
 
 func main() {
-	
+
 	logger := custom_log.NewCustomLogger()
 	cfg, err := config.LoadConfig("config", "yaml", path.Join("internal", "config"))
 	if err != nil {
@@ -29,15 +28,12 @@ func main() {
 		logger.Fatal(fmt.Sprintf("Failed to connect to the database: %s", err.Error()))
 	}
 	defer db.Close()
-
-	encrypt.InitTokenPool()
-
 	router := routes.SetupRoutes(db, cfg.JWTSecret, *logger)
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPatch},
 		AllowCredentials: true,
-		AllowedHeaders: []string{"*"},
+		AllowedHeaders:   []string{"*"},
 	})
 	handler := c.Handler(router)
 
