@@ -48,7 +48,6 @@ func buildUrl(url config.Url) (string) {
 }
 func buildQueryParams(parameters map[string]interface{}) (string){
 	params := ""
-	// fmt.Println(parameters)
 	for k, v := range(parameters) {
 		params = fmt.Sprintf("%v&%v=%v",params, k, v)
 	}

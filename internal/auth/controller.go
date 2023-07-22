@@ -70,7 +70,7 @@ func (c *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 		response.RespondWithError(w, http.StatusBadRequest, "Internal Server Error ")
 		return
 	}
-
+	c.logger.Debug(fmt.Sprintf("Received user: %v", user))
 	err = c.authService.RegisterUser(user, c.logger)
 	if err != nil {
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error ")

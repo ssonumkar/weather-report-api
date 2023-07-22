@@ -9,18 +9,15 @@ import (
 	"github.com/ssonumkar/weather-report-api/internal/log"
 )
 
-// WeatherController handles weather-related requests
 type WeatherController struct {
 	weatherService IWeatherService
 	logger log.CustomLogger
 }
 
-// NewWeatherController creates a new instance of WeatherController
 func NewWeatherController(weatherService IWeatherService, logger log.CustomLogger) *WeatherController {
 	return &WeatherController{weatherService, logger}
 }
 
-// GetCurrentWeather handles the request to get the current weather
 func (c *WeatherController) GetCurrentWeather(w http.ResponseWriter, r *http.Request) {
 	c.logger.UpdateEndpoint(log.Weather_Get)
 	c.logger.Info("-----------------------------------------------------")

@@ -11,17 +11,14 @@ import (
 	"github.com/ssonumkar/weather-report-api/internal/log"
 )
 
-// AuthMiddleware is a middleware for authentication
 type AuthMiddleware struct {
 	secretKey string
 }
 
-// NewAuthMiddleware creates a new instance of AuthMiddleware
 func NewAuthMiddleware(secretKey string) *AuthMiddleware {
 	return &AuthMiddleware{secretKey}
 }
 
-// Authenticate is the middleware function for authentication
 func (m *AuthMiddleware) Authenticate(tokenPool encrypt.IAuthTokenPool, logger log.CustomLogger, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.UpdateEndpoint(log.Auth)

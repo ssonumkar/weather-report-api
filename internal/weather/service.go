@@ -9,18 +9,14 @@ import (
 	"github.com/ssonumkar/weather-report-api/internal/utils"
 )
 
-// WeatherService handles weather-related operations
 type WeatherService struct {
-	// Add dependencies as needed
 }
 
-// NewWeatherService creates a new instance of WeatherService
 func NewWeatherService() *WeatherService {
 	return &WeatherService{}
 }
 
 
-// GetCurrentWeather gets the current weather for the specified city
 func (s *WeatherService) GetCurrentWeather(city string, lat float64, lon float64, apiKey string, logger log.CustomLogger) (*Weather, error) {
 	urlCfg, err := config.LoadUrls()
 	if err != nil{

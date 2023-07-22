@@ -8,12 +8,10 @@ import (
 	"github.com/ssonumkar/weather-report-api/internal/log"
 )
 
-// WeatherHistoryRepository handles database operations related to weather history
 type WeatherHistoryRepository struct {
 	db *sql.DB
 }
 
-// NewWeatherHistoryRepository creates a new instance of WeatherHistoryRepository
 func NewWeatherHistoryRepository(db *sql.DB) *WeatherHistoryRepository {
 	return &WeatherHistoryRepository{db}
 }
@@ -30,7 +28,6 @@ func (r *WeatherHistoryRepository) InsertWeatherSearch(weather WeatherHistory, l
 	}
 	logger.Debug("Prepare statement successful")
 
-	// golangDateTime := time.Now().Format(fmt.Sprintf("%d-%d-%d", user.DOB.Year, user.DOB.Month, user.DOB.Day)) 
 	golangDateTime := time.Now().Format("2006-01-02 15:04:05")
 	_ , err = stmt.Exec(weather.UserId, weather.City, weather.TempMin, weather.TempMax, weather.FeelsLike, golangDateTime)
 	defer stmt.Close()
@@ -41,7 +38,6 @@ func (r *WeatherHistoryRepository) InsertWeatherSearch(weather WeatherHistory, l
 	logger.Debug("Weather search data inserted successfully in database")
 	return nil
 }
-// DeleteWeatherHistory deletes a weather history entry from the database
 func (r *WeatherHistoryRepository) DeleteWeatherHistory(historyID string, logger log.CustomLogger) error {
 	stmt, err := r.db.Prepare("CALL DeleteWeatherHistory(?)");
 	
@@ -70,10 +66,8 @@ func (r *WeatherHistoryRepository) GetWeatherSearchHistory(userID string, logger
     }
     defer rows.Close()
 
-    // An album slice to hold data from returned rows.
     var weatherSerchHistory []WeatherHistory
 
-    // Loop through rows, using Scan to assign column data to struct fields.
     for rows.Next() {
         var search WeatherHistory
         if err := rows.Scan(&search.Id, &search.UserId, &search.City, &search.TempMin, &search.TempMin, &search.FeelsLike, &search.CreatedAt); err != nil {

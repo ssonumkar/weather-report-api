@@ -9,10 +9,7 @@ import (
 type UrlConfig struct{
 	UrlList   map[string]Url
 }
-// type Parameter struct {
-// 	Key   string
-// 	Value string
-// }
+
 type Url struct {
 	UrlString  string
 	Parameters map[string]interface{}

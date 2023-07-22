@@ -10,13 +10,11 @@ import (
 	"github.com/ssonumkar/weather-report-api/internal/log"
 )
 
-// WeatherHistoryController handles weather history-related requests
 type WeatherHistoryController struct {
 	weatherHistoryService IWeatherHistoryService
 	logger log.CustomLogger
 }
 
-// NewWeatherHistoryController creates a new instance of WeatherHistoryController
 func NewWeatherHistoryController(weatherHistoryService IWeatherHistoryService, logger log.CustomLogger) *WeatherHistoryController {
 	return &WeatherHistoryController{weatherHistoryService, logger}
 }
@@ -49,7 +47,6 @@ func (c *WeatherHistoryController) AddSearchedWeather(w http.ResponseWriter, r *
 		"message": "Record inserted successfully",
 	})
 }
-// DeleteWeatherHistory handles the request to delete a weather history entry
 func (c *WeatherHistoryController) DeleteWeatherHistory(w http.ResponseWriter, r *http.Request) {
 	c.logger.UpdateEndpoint(log.Weather_Hist_Delete)
 	c.logger.Info("---------------------------------------------------")

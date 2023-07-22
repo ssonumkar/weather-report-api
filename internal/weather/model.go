@@ -2,7 +2,6 @@ package weather
 
 import "github.com/ssonumkar/weather-report-api/internal/log"
 
-// Weather represents weather conditions
 type Weather struct {
 	City        string    `json:"city"`
 	Report Report `json:"main"`

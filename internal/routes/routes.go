@@ -12,17 +12,15 @@ import (
 	weatherhistory "github.com/ssonumkar/weather-report-api/internal/weather_history"
 )
 
-// SetupRoutes sets up the application routes
 func SetupRoutes(db *sql.DB, JWTSecretKey string, logger log.CustomLogger) *mux.Router {
 	router := mux.NewRouter()
 
-	// Create instances of service and auth
 	tokenPool := encrypt.NewAuthTokenPool()
 	passwordManager := encrypt.NewPasswordManager()
 	userRepository := auth.NewUserRepository(db)
 	authService := auth.NewAuthService(userRepository, tokenPool, passwordManager, JWTSecretKey)
 	weatherService := weather.NewWeatherService()
-	weatherHistoryRepository := weatherhistory.NewWeatherHistoryRepository(db) // Replace "db" with your database instance
+	weatherHistoryRepository := weatherhistory.NewWeatherHistoryRepository(db) 
 	weatherHistoryService := weatherhistory.NewWeatherHistoryService(weatherHistoryRepository)
 
 	authController := auth.NewAuthController(authService, logger)
@@ -30,7 +28,6 @@ func SetupRoutes(db *sql.DB, JWTSecretKey string, logger log.CustomLogger) *mux.
 	weatherHistoryController := weatherhistory.NewWeatherHistoryController(weatherHistoryService, logger)
 
 	_middleware := middleware.NewAuthMiddleware(JWTSecretKey)
-	// Define routes and map them to the corresponding handlers
 	router.HandleFunc("/api/login", authController.Login).Methods("POST")
 	router.HandleFunc("/api/logout", _middleware.Authenticate(tokenPool, logger, authController.Logout)).Methods("POST")
 	router.HandleFunc("/api/register", authController.Register).Methods("POST")

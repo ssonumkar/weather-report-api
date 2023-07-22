@@ -2,7 +2,6 @@ package auth
 
 import "github.com/ssonumkar/weather-report-api/internal/log"
 
-// User represents a user entity
 type User struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`
