@@ -67,7 +67,7 @@ func (c *AuthController) Register(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 
 	if err != nil {
-		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error ")
+		response.RespondWithError(w, http.StatusBadRequest, "Internal Server Error ")
 		return
 	}
 

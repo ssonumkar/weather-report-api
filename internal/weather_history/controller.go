@@ -40,7 +40,7 @@ func (c *WeatherHistoryController) AddSearchedWeather(w http.ResponseWriter, r *
 
 	err = c.weatherHistoryService.InsertWeatherSearch(weather, c.logger)
 	if err != nil{
-		response.RespondWithError(w, http.StatusBadRequest, "Incorrect data")
+		response.RespondWithError(w, http.StatusInternalServerError, "Incorrect data")
 		return
 	}
 	c.logger.Info("Weather search POST Successful")
@@ -79,7 +79,7 @@ func (c *WeatherHistoryController) BulkDeleteWeatherHistory(w http.ResponseWrite
 	err :=  json.NewDecoder(r.Body).Decode(&historyIDs)
 	if err != nil {
 		c.logger.Error(fmt.Sprint("Failed to decode bulk weather history:", err))
-		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
+		response.RespondWithError(w, http.StatusBadRequest, "Internal Server Error")
 		return
 	}
 	
