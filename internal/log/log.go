@@ -3,7 +3,6 @@ package log
 import (
 	"log"
 	"os"
-	"time"
 )
 
 type CustomLogger struct {
@@ -19,7 +18,7 @@ func (c *CustomLogger) UpdateEndpoint(endpoint Endpoint){
 	c.endpoint = endpoint
 }
 func (c *CustomLogger) logEntry(logLevel string, message string ){
-	c.logger.Printf("%s: %v %s %s %s\n", logLevel, time.Now(), c.endpoint.Name, c.endpoint.Method, message )
+	c.logger.Printf("%s %s %s %s\n", logLevel, c.endpoint.Name, c.endpoint.Method, message )
 }
 func (c *CustomLogger) Debug(message string){
 	c.logEntry("DEBUG", message)
