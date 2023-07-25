@@ -30,14 +30,20 @@ func (c *WeatherController) GetCurrentWeather(w http.ResponseWriter, r *http.Req
 	lon, err := strconv.ParseFloat(r.FormValue("lon"), 64)
 	if err != nil{
 		c.logger.Debug(fmt.Sprint("cannot this convert string to float: ", r.FormValue("lat")))
-		response.RespondWithError(w, http.StatusBadRequest, "Incorrect value for lattitude.")
+		response.RespondWithError(w, http.StatusBadRequest, "Incorrect value for longitude.")
 		return
 	}
 	city := r.FormValue("city")
 	apiKey := r.FormValue("apiKey")
+	if lat == 0 || lon == 0 || apiKey == ""{
+		c.logger.Error("Invalid input for request")
+		response.RespondWithError(w, http.StatusBadRequest, "Invalid Request data")
+		return
+	}
 	c.logger.Info(fmt.Sprintf("Request params are: city: %s, lat: %f, lon: %f, apiKey: %s", city, lat, lon, apiKey))
 	weather, err := c.weatherService.GetCurrentWeather(city, lat, lon, apiKey, c.logger)
 	if err != nil {
+		c.logger.Error(err.Error())
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}

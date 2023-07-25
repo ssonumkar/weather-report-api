@@ -54,9 +54,14 @@ func (c *WeatherHistoryController) DeleteWeatherHistory(w http.ResponseWriter, r
 	vars := mux.Vars(r)
 	historyID := vars["history_id"]
 	c.logger.Info(fmt.Sprint("Request Param received: HistoryID:", historyID))
-
+	if historyID == ""{
+		c.logger.Error("History ID cannot be empty")
+		response.RespondWithError(w, http.StatusBadRequest, "History ID cannot be empty")
+		return
+	}
 	err := c.weatherHistoryService.DeleteWeatherHistory(historyID, c.logger)
 	if err != nil {
+		c.logger.Error(fmt.Sprintf("Error deleting history: %s", err.Error()))
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
@@ -70,20 +75,24 @@ func (c *WeatherHistoryController) DeleteWeatherHistory(w http.ResponseWriter, r
 func (c *WeatherHistoryController) BulkDeleteWeatherHistory(w http.ResponseWriter, r *http.Request) {
 	c.logger.UpdateEndpoint(log.Weather_Hist_Bulk_Delete)
 	c.logger.Info("---------------------------------------------------")
-	// body, _ := io.ReadAll(r.Body)
-	// c.logger.Debug(fmt.Sprintf("REquest body: %s", string(body)))
+	
 	var historyIDs BulkDeleteWeatherHistory
 	err :=  json.NewDecoder(r.Body).Decode(&historyIDs)
 	if err != nil {
 		c.logger.Error(fmt.Sprint("Failed to decode bulk weather history:", err))
-		response.RespondWithError(w, http.StatusBadRequest, "Internal Server Error")
+		response.RespondWithError(w, http.StatusBadRequest, "Incorrect data")
 		return
 	}
 	
 	c.logger.Info(fmt.Sprint("Request params: HistoryIDs: ",historyIDs))
-	
+	if len(historyIDs.Ids) == 0 {
+		c.logger.Error("History IDs cannot be empty")
+		response.RespondWithError(w, http.StatusBadRequest, "Incorrect data")
+		return
+	}
 	err = c.weatherHistoryService.BulkDeleteWeatherHistory(historyIDs, c.logger)
 	if err != nil {
+		c.logger.Error(err.Error())
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
@@ -99,8 +108,14 @@ func (c *WeatherHistoryController) GetWeatherSearchHistory(w http.ResponseWriter
 	vars := mux.Vars(r)
 	userID := vars["user_id"]
 	c.logger.Debug(fmt.Sprintf("User ID: %s",userID))
+	if userID == ""{
+		c.logger.Error("History ID cannot be empty")
+		response.RespondWithError(w, http.StatusBadRequest, "User ID cannot be empty")
+		return
+	}
 	history, err := c.weatherHistoryService.GetWeatherSearchHistory(userID, c.logger)
 	if err != nil{
+		c.logger.Error(err.Error())
 		response.RespondWithError(w, http.StatusInternalServerError, "Internal Server Error")
 		return
 	}
