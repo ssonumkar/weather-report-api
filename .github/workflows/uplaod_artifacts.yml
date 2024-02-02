@@ -1,0 +1,27 @@
+name: Upload Artifacts
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-lates
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+      - name: Build
+        run: go build -v ./...
+      - name: Save Artifacts
+        uses: actions/upload-artifacts@v3
+        with:
+          name: build-files
+          path: |
+            go.mod
+            weather-report-api.exe
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying" 
