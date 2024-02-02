@@ -6,7 +6,7 @@ on:
   #     - main
 jobs:
   build:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up go
@@ -23,6 +23,7 @@ jobs:
             go.mod
             weather-report-api.exe
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying" 
