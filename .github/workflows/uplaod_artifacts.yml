@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: go build -v ./...
       - name: Save Artifacts
-        uses: actions/upload-artifacts@v3
+        uses: actions/upload-artifact@v3
         with:
           name: build-files
           path: |
